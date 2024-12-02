@@ -39,7 +39,7 @@ async def all_message(message):
 
 @dp.message_handler(state=UserState.age)
 async def set_growth(message, state):
-    if not message.text.isdigit():
+    if not message.text.isdigit() or int(message.text) == 0:
         await message.answer('Введите положительное целое число!')
         return None
     await state.update_data(age=message.text)
@@ -49,7 +49,7 @@ async def set_growth(message, state):
 
 @dp.message_handler(state=UserState.growth)
 async def set_weight(message, state):
-    if not message.text.isdigit():
+    if not message.text.isdigit() or int(message.text) == 0:
         await message.answer('Введите положительное целое число!')
         return None
     await state.update_data(growth=message.text)
@@ -59,7 +59,7 @@ async def set_weight(message, state):
 
 @dp.message_handler(state=UserState.weight)
 async def set_calories(message, state):
-    if not message.text.isdigit():
+    if not message.text.isdigit() or int(message.text) == 0:
         await message.answer('Введите положительное целое число!')
         return None
     await state.update_data(weight=message.text)

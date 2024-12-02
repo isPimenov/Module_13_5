@@ -11,7 +11,8 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 kb = ReplyKeyboardMarkup(resize_keyboard=True)
 button1 = KeyboardButton(text='Рассчитать')
 button2 = KeyboardButton(text='Информация')
-kb.add(button1, button2)
+kb.add(button1)
+kb.add(button2)
 
 
 class UserState(StatesGroup):
@@ -38,6 +39,9 @@ async def all_message(message):
 
 @dp.message_handler(state=UserState.age)
 async def set_growth(message, state):
+    if not message.text.isdigit():
+        await message.answer('Введите положительное целое число!')
+        return None
     await state.update_data(age=message.text)
     await message.answer('Введите свой рост, см:')
     await UserState.growth.set()
@@ -45,6 +49,9 @@ async def set_growth(message, state):
 
 @dp.message_handler(state=UserState.growth)
 async def set_weight(message, state):
+    if not message.text.isdigit():
+        await message.answer('Введите положительное целое число!')
+        return None
     await state.update_data(growth=message.text)
     await message.answer('Введите свой вес, кг:')
     await UserState.weight.set()
@@ -52,6 +59,9 @@ async def set_weight(message, state):
 
 @dp.message_handler(state=UserState.weight)
 async def set_calories(message, state):
+    if not message.text.isdigit():
+        await message.answer('Введите положительное целое число!')
+        return None
     await state.update_data(weight=message.text)
     data = await state.get_data()
     calories = int(data['growth']) * 6.25 + int(data['weight']) * 10 - int(data['age']) * 5 + 5
